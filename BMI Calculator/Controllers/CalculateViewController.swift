@@ -16,6 +16,7 @@ class CalculateViewController: UIViewController {
     @IBOutlet weak var heightSlider: UISlider!
     @IBOutlet weak var weightSlider: UISlider!
     
+    var bmi = "0.0";
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -31,13 +32,24 @@ class CalculateViewController: UIViewController {
     @IBAction func calculatePressed(_ sender: UIButton) {
         let heightValue = heightSlider.value;
         let weightValue = weightSlider.value;
-        let bmi = weightValue / (heightValue * heightValue);
+        bmi = String(format: "%.2f", weightValue / (heightValue * heightValue));
         print (bmi);
         
-        let secondVC = SecondViewController();
-        secondVC.bmiValue = String(format: "%.1f", bmi);
+        // let secondVC = SecondViewController();
+        //secondVC.bmiValue = String(format: "%.1f", bmi);
         
-        self.present(secondVC, animated: true, completion: nil);
+        //self.present(secondVC, animated: true, completion: nil);
+        
+        self.performSegue(withIdentifier: "goToResult", sender: self)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToResult" {
+            let destinationVC = segue.destination as! ResultViewController;
+            print(bmi);
+            destinationVC.bmiValue = bmi;
+        }
     }
 }
 
